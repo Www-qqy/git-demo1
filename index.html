@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button>click me!</button>
+    <script>
+        var grid = [[2, 1, 1], [1, 1, 0], [0, 1, 1]];
+        var orangesRotting = function (grid) {
+            let q = [];
+            let newFresh = 0;
+            let minutes = 0;
+            // Push rotten oranges to the stack and count fresh oranges
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j] === 2) q.push([i, j]);
+                    if (grid[i][j] === 1) newFresh++;
+                }
+            }
+
+            while (q.length && newFresh) {
+                let newQ = []; // queue for next minute
+                while (q.length) {
+                    let badOrange = q.shift();
+                    let newRottens = infectOthers(grid, badOrange[0], badOrange[1], newQ);
+                    newFresh -= newRottens;
+                }
+                minutes++;
+                q = newQ;
+            }
+            if (newFresh !== 0) return -1;
+            return minutes;
+        };
+
+        // Infect surrounding oranges
+        // Return the number of newly infected oranges
+        var infectOthers = function (grid, i, j, q) {
+            let infected = 0;
+            if (i > 0 && grid[i - 1][j] === 1) {
+                grid[i - 1][j]++;
+                infected++;
+                q.push([i - 1, j]);
+            }
+            if (j > 0 && grid[i][j - 1] === 1) {
+                grid[i][j - 1]++;
+                infected++;
+                q.push([i, j - 1]);
+            }
+            if (i < grid.length - 1 && grid[i + 1][j] === 1) {
+                grid[i + 1][j]++;
+                infected++;
+                q.push([i + 1, j]);
+            }
+            if (j < grid[0].length - 1 && grid[i][j + 1] === 1) {
+                grid[i][j + 1]++;
+                infected++;
+                q.push([i, j + 1]);
+            }
+
+            return infected;
+        }
+        var orangesRotting = function (grid) {
+            let q = [];
+            let newFresh = 0;
+            let minutes = 0;
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j] === 2) q.push([i, j]);//把烂橘子坐标记下来
+                    if (grid[i][j] === 1) newFresh++;//清点初始状态新鲜橘子个数
+                }
+            }
+            while (q.length && newFresh) {
+                //只要烂橘子里未感染其他橘子的成员还存在且还有新鲜橘子
+                let newQ = [];
+                while (q.length) {
+                    //只要烂橘子里未感染其他橘子的成员还存在 
+                    let badOrange = q.shift();//坏橘子
+                    let newRottens = infectOthers(grid, badOrange[0], badOrange[1], newQ);//腐烂传染函数
+                    newFresh -= newRottens;
+                }
+                minutes++;
+                q = newQ;
+            }
+            if (newFresh !== 0) return -1;
+            return minutes;
+        }
+        var infectOthers = function (grid, i, j, q) {
+            let infected = 0;
+            if (i > 0 && grid[i - 1][j] === 1) {
+                grid[i - 1][j]++;
+                infected++;
+                q.push([i - 1, j]);
+            }
+            if (j > 0 && grid[i][j - 1] === 1) {
+                grid[i][j - 1]++;
+                infected++;
+                q.push([i, j - 1]);
+            }
+            if (i < grid.length - 1 && grid[i + 1][j] === 1) {
+                grid[i + 1, j]++;
+                infected++;
+                q.push([i + 1, j]);
+            }
+            if (j < grid[0].length - 1 && grid[i][j + 1] === 1) {
+                grid[i][j + 1]++;
+                infected++;
+                q.push([i, j + 1]);
+            }
+            return infected;
+
+        }
+
+            //grid:网格 格子
+
+
+    </script>
+</body>
+
+</html>
